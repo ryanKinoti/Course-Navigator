@@ -1,0 +1,1 @@
+web gunicorn Course_Navigator.config.wsgi:application --log-file -
