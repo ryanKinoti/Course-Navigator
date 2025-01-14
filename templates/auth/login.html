@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    CN: Login
+{% endblock %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
+            <div class="flex flex-col items-center mb-6">
+                <div class="bg-blue-100 p-3 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+                <h2 class="mt-4 text-2xl font-bold text-gray-900">
+                    <a href="{% url "home" %}">Course Navigator</a>
+                </h2>
+                <p class="mt-2 text-gray-600">Sign in to your account</p>
+            </div>
+
+            <form method="POST" class="space-y-4" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input
+                            type="email"
+                            name="email"
+                            class="mt-1 w-full p-2 border rounded-md"
+                            placeholder="Enter your email"
+                            required
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input
+                            type="password"
+                            name="password"
+                            class="mt-1 w-full p-2 border rounded-md"
+                            placeholder="Enter your password"
+                            required
+                    >
+                </div>
+
+                <button
+                        type="submit"
+                        class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
+                >
+                    Sign In
+                </button>
+            </form>
+
+            <p class="mt-4 text-center text-sm text-gray-600">
+                Don't have an account?
+                <a href="{% url 'register' %}" class="text-blue-600 hover:underline">Register here</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

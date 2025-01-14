@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}
+    CN: Dashboard
+{% endblock %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-100">
+        <!-- Header -->
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        <a href="{% url "home" %}">Course Navigator</a>
+                    </h1>
+                    <div class="flex items-center space-x-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        <span class="text-gray-600">{{ request.user.username }}</span>
+                        <a href="{% url 'logout' %}" class="text-red-600 hover:text-red-800">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Grade Input Section -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <h2 class="text-xl font-semibold">Enter Your Grades</h2>
+                        </div>
+
+                        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                              action="{% url 'dashboard' %}">
+                            {% csrf_token %}
+                            {% for subject in selected_subjects %}
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">
+                                        {{ subject.name }}
+                                    </label>
+                                    <select name="grade_{{ subject.id }}" class="mt-1 w-full p-2 border rounded-md">
+                                        <option value="">Select Grade</option>
+                                        <option value="A"
+                                                {% if existing_grades|get_item:subject.id == 'A' %}selected{% endif %}>A
+                                        </option>
+                                        <option value="A-"
+                                                {% if existing_grades|get_item:subject.id == 'A-' %}selected{% endif %}>
+                                            A-
+                                        </option>
+                                        <option value="B+"
+                                                {% if existing_grades|get_item:subject.id == 'B+' %}selected{% endif %}>
+                                            B+
+                                        </option>
+                                        <option value="B"
+                                                {% if existing_grades|get_item:subject.id == 'B' %}selected{% endif %}>B
+                                        </option>
+                                        <option value="B-"
+                                                {% if existing_grades|get_item:subject.id == 'B-' %}selected{% endif %}>
+                                            B-
+                                        </option>
+                                        <option value="C+"
+                                                {% if existing_grades|get_item:subject.id == 'C+' %}selected{% endif %}>
+                                            C+
+                                        </option>
+                                        <option value="C"
+                                                {% if existing_grades|get_item:subject.id == 'C' %}selected{% endif %}>C
+                                        </option>
+                                        <option value="C-"
+                                                {% if existing_grades|get_item:subject.id == 'C-' %}selected{% endif %}>
+                                            C-
+                                        </option>
+                                        <option value="D+"
+                                                {% if existing_grades|get_item:subject.id == 'D+' %}selected{% endif %}>
+                                            D+
+                                        </option>
+                                        <option value="D"
+                                                {% if existing_grades|get_item:subject.id == 'D' %}selected{% endif %}>D
+                                        </option>
+                                        <option value="D-"
+                                                {% if existing_grades|get_item:subject.id == 'D-' %}selected{% endif %}>
+                                            D-
+                                        </option>
+                                        <option value="E"
+                                                {% if existing_grades|get_item:subject.id == 'E' %}selected{% endif %}>E
+                                        </option>
+                                    </select>
+                                </div>
+                            {% endfor %}
+
+                            <div class="md:col-span-2">
+                                <button
+                                        type="submit"
+                                        class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">
+                                    Get Recommendations
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                            <h3 class="text-lg font-semibold mb-4">Academic Summary</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between">
+                                    <span>Total Subjects</span>
+                                    <span class="font-semibold">{{ total_subjects }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Average Grade</span>
+                                    <span class="font-semibold">{{ average_grade|default:"N/A" }}</span>
+                                </div>
+
+                                <!-- Grade Breakdown -->
+                                <div class="mt-4">
+                                    <h4 class="text-md font-semibold mb-2">Grade Breakdown</h4>
+                                    {% for subject, grade in grade_breakdown.items %}
+                                        <div class="flex justify-between text-sm">
+                                            <span>{{ subject }}</span>
+                                            <span class="font-medium">{{ grade }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-lg font-semibold mb-4">Recent Recommendations</h3>
+                            {% if recent_recommendations %}
+                                {% for rec in recent_recommendations %}
+                                    <div class="mb-4 p-3 bg-gray-50 rounded">
+                                        <div class="font-medium">{{ rec.course.name }}</div>
+                                        <div class="text-sm text-gray-600">
+                                            Match: {{ rec.similarity_percentage }}%
+                                            <br>
+                                            Confidence: {{ rec.confidence_percentage }}%
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <a href="{% url 'recommendations' %}"
+                                   class="mt-4 block text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                    View All Recommendations
+                                </a>
+                            {% else %}
+                                <p class="text-gray-600">No recent recommendations</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Add under Stats Section -->
+                        <div class="mt-6">
+                            <a href="{% url 'course-list' %}"
+                               class="w-full flex items-center justify-center px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50">
+                                Browse All Courses
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

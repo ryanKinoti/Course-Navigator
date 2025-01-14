@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    CN: Recommendation Results
+{% endblock %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-100">
+        <!-- Results Header -->
+        <div class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    <a href="{% url "home" %}">Your Course Recommendation</a>
+                </h1>
+                <a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-800">Back to Dashboard</a>
+                <p class="mt-2 text-gray-600">Based on your academic performance and interests</p>
+            </div>
+        </div>
+
+        <!-- Recommendations List -->
+        <main class="max-w-7xl mx-auto px-4 py-6">
+            <div class="space-y-6">
+                {% for recommendation in recommendations %}
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <!-- Course Info -->
+                            <div class="md:col-span-2">
+                                <div class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2"
+                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                    </svg>
+                                    <div>
+                                        <h2 class="text-xl font-semibold">{{ recommendation.course.name }}</h2>
+                                        <p class="text-sm text-gray-500">{{ recommendation.course.code }}</p>
+                                    </div>
+                                </div>
+                                <p class="mt-2 text-gray-600">{{ recommendation.course.description|truncatewords:10 }}</p>
+                                <div class="mt-2 space-y-1">
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-medium">University:</span>
+                                        {{ recommendation.course.university }}
+                                    </p>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-medium">Required Mean Grade:</span>
+                                        {{ recommendation.course.mean_grade }}
+                                    </p>
+                                    {% if recommendation.course.course_url %}
+                                        <a href="{{ recommendation.course.course_url }}"
+                                           target="_blank"
+                                           class="text-sm text-blue-600 hover:underline">
+                                            Visit University Course Page →
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Scores -->
+                            <div class="flex flex-col justify-center">
+                                <div class="flex items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600 mr-2"
+                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M9 12l2 2 4-4"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Confidence Score</p>
+                                        <p class="text-lg font-bold">{{ recommendation.confidence_percentage }}%</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2"
+                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Similarity Match</p>
+                                        <p class="text-lg font-bold">{{ recommendation.similarity_percentage }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Button -->
+                            <div class="flex items-center justify-center space-x-2">
+                                <a href="{% url 'course-detail' recommendation.course.id %}"
+                                   class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                    View Course Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="bg-white rounded-lg shadow p-6 text-center">
+                        <p class="text-gray-600">No recommendations available yet.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Export Options -->
+            {% if recommendations %}
+                <div class="mt-6 flex justify-end space-x-4">
+                    <a href=""
+                       class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                        Download PDF
+                    </a>
+                    <button onclick="shareResults()"
+                            class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                        Share Results
+                    </button>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function shareResults() {
+            // Add your sharing functionality here
+            alert('Sharing functionality will be implemented here');
+        }
+    </script>
+{% endblock %}

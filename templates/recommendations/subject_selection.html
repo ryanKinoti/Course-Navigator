@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    CN: Subject Selection
+{% endblock %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-100 flex items-center justify-center py-12">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Select Your Subjects</h2>
+                <p class="mt-2 text-gray-600">Choose up to 8 subjects that you studied</p>
+            </div>
+
+            <form method="POST" id="subjectForm" class="space-y-4" action="{% url 'select_subjects' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for subject in available_subjects %}
+                        <div class="flex items-center space-x-3">
+                            <input
+                                    type="checkbox"
+                                    id="subject_{{ subject.id }}"
+                                    name="selected_subjects"
+                                    value="{{ subject.id }}"
+                                    class="subject-checkbox h-4 w-4 text-blue-600">
+                            <label for="subject_{{ subject.id }}" class="text-gray-700">
+                                {{ subject.name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-6">
+                    <p id="subjectCounter" class="text-sm text-gray-600 mb-4">
+                        Selected: 0/8 subjects
+                    </p>
+                    <button
+                            type="submit"
+                            class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
+                    >
+                        Continue to Dashboard
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.subject-checkbox');
+            const counter = document.getElementById('subjectCounter');
+            const maxSubjects = 8;
+
+            function updateCounter() {
+                const checkedCount = document.querySelectorAll('.subject-checkbox:checked').length;
+                counter.textContent = `Selected: ${checkedCount}/${maxSubjects} subjects`;
+
+                // Disable/enable checkboxes based on selection count
+                if (checkedCount >= maxSubjects) {
+                    checkboxes.forEach(cb => {
+                        if (!cb.checked) cb.disabled = true;
+                    });
+                } else {
+                    checkboxes.forEach(cb => {
+                        cb.disabled = false;
+                    });
+                }
+            }
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateCounter);
+            });
+        });
+    </script>
+{% endblock %}

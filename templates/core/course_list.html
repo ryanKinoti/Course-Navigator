@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    CN: Available Courses
+{% endblock %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-100">
+        <!-- Header -->
+        <div class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    <a href="{% url "home" %}">Available Courses</a>
+                </h1>
+                <p class="mt-2 text-gray-600">Browse through our comprehensive list of courses</p>
+            </div>
+        </div>
+
+        <!-- Course List -->
+        <main class="max-w-7xl mx-auto px-4 py-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for course in courses %}
+                    <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+                        <h2 class="text-xl font-semibold text-gray-900">{{ course.name }}</h2>
+                        <p class="text-sm text-blue-600">{{ course.code }}</p>
+                        <p class="text-sm text-gray-600 mt-1">{{ course.university }}</p>
+                        <div class="mt-2 text-sm text-gray-600">
+                            <p class="line-clamp-3">{{ course.description }}</p>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-600">
+                                Required Mean: {{ course.mean_grade }}
+                            </span>
+                            <div class="space-x-2">
+                                {% if course.course_url %}
+                                    <a href="{{ course.course_url }}"
+                                       target="_blank"
+                                       class="text-blue-600 hover:text-blue-800 text-sm">
+                                        University Link
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'course-detail' course.id %}"
+                                   class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-span-3 text-center py-12">
+                        <p class="text-gray-600">No courses available at the moment.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+{% endblock %}
