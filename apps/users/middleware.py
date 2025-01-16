@@ -1,4 +1,3 @@
-# apps/users/middleware.py
 from apps.recommendations.models import UserProfile
 
 class UserProfileMiddleware:

@@ -1,4 +1,3 @@
-# apps/core/management/commands/load_data.py
 import pandas as pd
 from django.core.management.base import BaseCommand
 from apps.core.models import Subject, Course, CourseRequirement

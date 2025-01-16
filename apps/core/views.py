@@ -1,4 +1,3 @@
-# apps/core/views.py
 from django.views.generic import TemplateView, ListView, DetailView
 from .models import Course
 
