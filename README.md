@@ -4,17 +4,6 @@ Course Navigator is a comprehensive recommendation system designed to help stude
 academic paths. The system leverages high school results to recommend suitable university courses, combining
 collaborative and content-based filtering techniques.
 
-## Table of Contents
-
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Project Structure](#project-structure)
-- [Setup and Installation](#setup-and-installation)
-- [Usage](#usage)
-- [ML Models](#ml-models)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Features
 
 - **User Management**: Authentication system for students and administrators.
@@ -119,6 +108,41 @@ Course-Navigator-main/
 - **Homepage**: `/`
 - **Login**: `/auth/login/`
 - **Course Recommendations**: `/recommendations/`
+
+### Automated Setup (Optional)
+
+You can set up the entire project (dependencies installation, database migrations, loading base data, and starting the
+server) using the `project_script.py` file:
+
+1. Make sure you have Python 3.8 or higher installed.
+2. Navigate to the project directory.
+3. Run the following command:
+
+   ```bash
+   python project_script.py
+   ```
+
+This script will:
+
+1. Install all the required dependencies.
+2. Perform database migrations.
+3. Load sample data into the database.
+4. Start the Django development server and Tailwind CSS compiler.
+
+### Further Notes
+
+- **Concurrent Processes**: Automatically compiles Tailwind CSS and starts the Django server concurrently for a faster
+  setup.
+- You can either use the automated script (`python project_script.py`) to set up and run the server or execute each step
+  manually as previously described in the [Setup and Installation](#setup-and-installation) section. This flexibility
+  allows you to customize your workflow based on your needs.
+
+### Troubleshooting
+
+- If `load_data` fails, ensure the data loading script exists in the `management/commands/` directory and is error-free.
+- If Tailwind CSS compilation fails, check that Node.js is installed and properly configured.
+- For any unexpected errors, consult the console logs and verify installation prerequisites (e.g., Python, Node.js,
+  Django, and Tailwind CSS dependencies).
 
 ## ML Models
 
