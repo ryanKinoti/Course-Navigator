@@ -53,9 +53,9 @@ class UserProfile(models.Model):
             return None
 
         grade_values = {
-            'A': 12, 'A-': 11, 'B+': 10, 'B': 9, 'B-': 8,
-            'C+': 7, 'C': 6, 'C-': 5, 'D+': 4, 'D': 3,
-            'D-': 2, 'E': 1
+            'A': 4.0, 'A-': 3.7, 'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+            'C+': 2.3, 'C': 2.0, 'C-': 1.7, 'D+': 1.3, 'D': 1.0,
+            'D-': 0.7, 'E': 0.3
         }
 
         inverse_grade_values = {v: k for k, v in grade_values.items()}  # Reverse mapping
@@ -68,4 +68,3 @@ class UserProfile(models.Model):
 
         # Return the grade letter
         return inverse_grade_values[closest_grade]
-
